@@ -19,6 +19,12 @@ import com.example.orderfood.viewmodel.CartViewModel
 import com.example.orderfood.viewmodel.FoodUiState
 import com.example.orderfood.viewmodel.FoodViewModel
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import com.example.orderfood.utils.removeVietnameseDiacritics
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -29,20 +35,41 @@ fun FoodListScreen(
 ) {
     val uiState by foodViewModel.uiState.collectAsState()
 
+    var isSearchActive by remember { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Thực đơn", fontWeight = FontWeight.Bold, fontSize = 30.sp) },
+                title = {
+                    if (isSearchActive) {
+                        SearchTextField(
+                            query = searchQuery,
+                            onQueryChange = { searchQuery = it },
+                            onClose = {
+                                isSearchActive = false
+                                searchQuery = ""
+                            }
+                        )
+                    } else {
+                        Text(text = "Thực đơn", fontWeight = FontWeight.Bold, fontSize = 30.sp)
+                    }
+                },
                 actions = {
-                    BadgedBox(
-                        badge = {
-                            if (cartViewModel.totalQuantity > 0)
-                                Badge { Text("${cartViewModel.totalQuantity}") }
-                        },
-                        modifier = Modifier.padding(end = 12.dp)
-                    ) {
-                        IconButton(onClick = onCartClick) {
-                            Icon(Icons.Default.ShoppingCart, contentDescription = "Giỏ hàng", modifier = Modifier.size(40.dp))
+                    if (!isSearchActive) {
+                        IconButton(onClick = { isSearchActive = true }) {
+                            Icon(Icons.Default.Search, contentDescription = "Tìm kiếm", modifier = Modifier.size(28.dp))
+                        }
+                        BadgedBox(
+                            badge = {
+                                if (cartViewModel.totalQuantity > 0)
+                                    Badge { Text("${cartViewModel.totalQuantity}") }
+                            },
+                            modifier = Modifier.padding(end = 12.dp)
+                        ) {
+                            IconButton(onClick = onCartClick) {
+                                Icon(Icons.Default.ShoppingCart, contentDescription = "Giỏ hàng", modifier = Modifier.size(28.dp))
+                            }
                         }
                     }
                 }
@@ -68,21 +95,41 @@ fun FoodListScreen(
                 )
 
                 is FoodUiState.Success -> {
-                    val groupedFoods = remember(state.foods) {
-                        state.foods.groupBy { it.category.ifBlank { "Khác" } }
+                    val filteredFoods = remember(state.foods, searchQuery) {
+                        if (searchQuery.isBlank()) {
+                            state.foods
+                        } else {
+                            val normalizedQuery = searchQuery.removeVietnameseDiacritics()
+                            state.foods.filter { food ->
+                                food.name.removeVietnameseDiacritics()
+                                    .contains(normalizedQuery, ignoreCase = true)
+                            }
+                        }
                     }
 
-                    LazyColumn(
-                        contentPadding = PaddingValues(bottom = 12.dp),
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        groupedFoods.forEach { (category, foodsInCategory) ->
-                            stickyHeader {
-                                CategoryHeader(category)
-                            }
-                            items(foodsInCategory, key = { it.id }) { food ->
-                                Box(Modifier.padding(horizontal = 12.dp, vertical = 5.dp)) {
-                                    FoodItemCard(food = food, onAdd = { cartViewModel.addToCart(food) })
+                    if (filteredFoods.isEmpty()) {
+                        Box(Modifier.fillMaxSize()) {
+                            Text(
+                                "Không tìm thấy món \"$searchQuery\"",
+                                Modifier.align(Alignment.Center).padding(24.dp),
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                        }
+                    } else {
+                        val groupedFoods = remember(filteredFoods) {
+                            filteredFoods.groupBy { it.category.ifBlank { "Khác" } }
+                        }
+
+                        LazyColumn(
+                            contentPadding = PaddingValues(bottom = 12.dp),
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            groupedFoods.forEach { (category, foodsInCategory) ->
+                                stickyHeader { CategoryHeader(category) }
+                                items(foodsInCategory, key = { it.id }) { food ->
+                                    Box(Modifier.padding(horizontal = 12.dp, vertical = 5.dp)) {
+                                        FoodItemCard(food = food, onAdd = { cartViewModel.addToCart(food) })
+                                    }
                                 }
                             }
                         }
@@ -132,4 +179,39 @@ private fun CategoryHeader(category: String) {
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SearchTextField(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onClose: () -> Unit
+) {
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
+    TextField(
+        value = query,
+        onValueChange = onQueryChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
+        placeholder = { Text("Tìm món ăn...") },
+        singleLine = true,
+        trailingIcon = {
+            IconButton(onClick = onClose) {
+                Icon(Icons.Default.Close, contentDescription = "Đóng tìm kiếm")
+            }
+        },
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent
+        )
+    )
 }
