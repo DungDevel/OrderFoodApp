@@ -54,8 +54,8 @@ fun CheckoutScreen(
                 if (showConfirmDialog) {
                     AlertDialog(
                         onDismissRequest = onDone,
-                        title = { Text("Xác nhận đơn hàng") },
-                        text = { Text("Tổng thanh toán: ${cartViewModel.totalPrice.toVnd()}") },
+                        title = { Text("Xác nhận gọi món") },
+                        text = { Text("Thanh toán: ${cartViewModel.totalPrice.toVnd()}") },
                         confirmButton = {
                             TextButton(onClick = {
                                 showConfirmDialog = false
