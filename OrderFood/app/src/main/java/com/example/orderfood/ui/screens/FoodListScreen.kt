@@ -69,7 +69,7 @@ fun FoodListScreen(
                         BadgedBox(
                             badge = {
                                 if (cartViewModel.totalQuantity > 0)
-                                    Badge { Text("${cartViewModel.totalQuantity}") }
+                                    Badge { Text(text = "${cartViewModel.totalQuantity}", fontSize = 15.sp) }
                             },
                             modifier = Modifier.padding(end = 12.dp)
                         ) {

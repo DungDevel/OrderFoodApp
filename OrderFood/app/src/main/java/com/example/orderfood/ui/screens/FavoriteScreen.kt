@@ -3,6 +3,9 @@ package com.example.orderfood.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,19 +25,33 @@ import com.example.orderfood.viewmodel.FoodViewModel
 fun FavoriteScreen(
     foodViewModel: FoodViewModel,
     cartViewModel: CartViewModel,
-    favoriteViewModel: FavoriteViewModel = hiltViewModel()
+    favoriteViewModel: FavoriteViewModel = hiltViewModel(),
+    onCartClick: () -> Unit
 ) {
     val uiState by foodViewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 title = {
-                    Text(
-                        text = "Món ăn yêu thích",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp
-                    )
+                        Text(text = "Yêu thích", fontWeight = FontWeight.Bold, fontSize = 30.sp)
+                },
+                actions = {
+                        BadgedBox(
+                            badge = {
+                                if (cartViewModel.totalQuantity > 0)
+                                    Badge { Text(text = "${cartViewModel.totalQuantity}", fontSize = 15.sp) }
+                            },
+                            modifier = Modifier.padding(end = 12.dp)
+                        ) {
+                            IconButton(onClick = onCartClick) {
+                                Icon(
+                                    Icons.Default.ShoppingCart,
+                                    contentDescription = "Giỏ hàng",
+                                    modifier = Modifier.size(28.dp)
+                                )
+                            }
+                        }
                 }
             )
         }
