@@ -14,7 +14,7 @@
       "price": 45000,
       "image": "https://tse1.mm.bing.net/th/id/OIP.ZiZQ7sFEuonmoq5g9RHh2gHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
       "category": "Phở",
-      "available": true
+      "available": false
     },
     {
       "id": "3",
@@ -883,6 +883,30 @@
       ],
       "totalPrice": 45000,
       "id": "v4KAXtDZ0tM"
+    },
+    {
+      "items": [
+        {
+          "foodId": 4,
+          "name": "Cơm gà",
+          "price": 40000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 40000,
+      "id": "O_CeoTfKK2g"
+    },
+    {
+      "items": [
+        {
+          "foodId": 5,
+          "name": "Cơm chiên",
+          "price": 45000,
+          "quantity": 224
+        }
+      ],
+      "totalPrice": 10080000,
+      "id": "bmR7jzmp93A"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
