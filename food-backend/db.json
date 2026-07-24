@@ -1,7 +1,7 @@
 {
   "foods": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Phở bò",
       "price": 45000,
       "image": "https://tse1.mm.bing.net/th/id/OIP.ZiZQ7sFEuonmoq5g9RHh2gHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
@@ -9,7 +9,7 @@
       "available": true
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Phở tái",
       "price": 45000,
       "image": "https://tse1.mm.bing.net/th/id/OIP.ZiZQ7sFEuonmoq5g9RHh2gHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
@@ -17,7 +17,7 @@
       "available": false
     },
     {
-      "id": "3",
+      "id": 3,
       "name": "Phở nạm",
       "price": 45000,
       "image": "https://tse1.mm.bing.net/th/id/OIP.ZiZQ7sFEuonmoq5g9RHh2gHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
@@ -25,7 +25,7 @@
       "available": true
     },
     {
-      "id": "4",
+      "id": 4,
       "name": "Cơm gà",
       "price": 40000,
       "image": "https://cdn.baoquocte.vn/stores/news_dataimages/2023/052023/14/07/com-tam-viet-nam-mot-trong-10-mon-an-tu-gao-ngon-nhat-the-gioi-20230514072835.jpg?rt=20230514073057",
@@ -33,7 +33,7 @@
       "available": true
     },
     {
-      "id": "5",
+      "id": 5,
       "name": "Cơm chiên",
       "price": 45000,
       "image": "https://tse1.mm.bing.net/th/id/OIP.ZiZQ7sFEuonmoq5g9RHh2gHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
@@ -41,7 +41,7 @@
       "available": true
     },
     {
-      "id": "6",
+      "id": 6,
       "name": "Bún bò",
       "price": 42000,
       "image": "https://tse2.mm.bing.net/th/id/OIP.NQHZtf8DCLePOZv59SPpVQHaE9?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
@@ -49,7 +49,7 @@
       "available": true
     },
     {
-      "id": "7",
+      "id": 7,
       "name": "Bún chả",
       "price": 45000,
       "image": "https://tse1.mm.bing.net/th/id/OIP.ZiZQ7sFEuonmoq5g9RHh2gHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
@@ -57,7 +57,7 @@
       "available": true
     },
     {
-      "id": "8",
+      "id": 8,
       "name": "Coca",
       "price": 5000,
       "image": "https://i.pinimg.com/originals/d8/ab/64/d8ab648475be320fc3f113dd2c058053.jpg",
@@ -65,7 +65,7 @@
       "available": true
     },
     {
-      "id": "9",
+      "id": 9,
       "name": "Pepsi",
       "price": 25000,
       "image": "https://tse3.mm.bing.net/th/id/OIP.MXOZaDpEHRqXeqZOiL2WmgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
