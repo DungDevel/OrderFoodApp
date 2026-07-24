@@ -21,16 +21,22 @@ import com.example.orderfood.viewmodel.FoodViewModel
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import com.example.orderfood.utils.removeVietnameseDiacritics
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import com.example.orderfood.viewmodel.FavoriteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun FoodListScreen(
     foodViewModel: FoodViewModel,
     cartViewModel: CartViewModel,
+    favoriteViewModel: FavoriteViewModel,
     onCartClick: () -> Unit
 ) {
     val uiState by foodViewModel.uiState.collectAsState()
@@ -128,7 +134,12 @@ fun FoodListScreen(
                                 stickyHeader { CategoryHeader(category) }
                                 items(foodsInCategory, key = { it.id }) { food ->
                                     Box(Modifier.padding(horizontal = 12.dp, vertical = 5.dp)) {
-                                        FoodItemCard(food = food, onAdd = { cartViewModel.addToCart(food) })
+                                        FoodItemCard(
+                                            food = food,
+                                            isFavorite = favoriteViewModel.isFavorite(food.id),
+                                            onAdd = { cartViewModel.addToCart(food) },
+                                            onToggleFavorite = { favoriteViewModel.toggleFavorite(food.id) }
+                                        )
                                     }
                                 }
                             }
@@ -141,27 +152,39 @@ fun FoodListScreen(
 }
 
 @Composable
-private fun FoodItemCard(food: Food, onAdd: () -> Unit) {
+fun FoodItemCard(
+    food: Food,
+    isFavorite: Boolean,
+    onAdd: () -> Unit,
+    onToggleFavorite: () -> Unit
+) {
     ElevatedCard(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
             AsyncImage(
                 model = food.image,
                 contentDescription = food.name,
-                modifier = Modifier.size(100.dp),
+                modifier = Modifier.size(70.dp),
                 error = androidx.compose.ui.graphics.painter.ColorPainter(
                     androidx.compose.ui.graphics.Color.LightGray
                 )
             )
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text(food.name, style = MaterialTheme.typography.titleMedium, fontSize = 20.sp)
+                Text(food.name, style = MaterialTheme.typography.titleMedium)
                 Text(food.price.toVnd(), style = MaterialTheme.typography.bodyMedium)
                 if (!food.available) {
                     Text("Hết món", color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.labelSmall)
                 }
             }
-            Button(onClick = onAdd, enabled = food.available) { Text(text = "Thêm món", fontWeight = FontWeight.Bold) }
+            IconButton(onClick = onToggleFavorite) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = "Yêu thích",
+                    tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Button(onClick = onAdd, enabled = food.available) { Text("Thêm") }
         }
     }
 }
@@ -200,7 +223,7 @@ private fun SearchTextField(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
-        placeholder = { Text("Tìm món ăn...") },
+        placeholder = { Text("Tìm món ăn") },
         singleLine = true,
         trailingIcon = {
             IconButton(onClick = onClose) {
@@ -215,3 +238,4 @@ private fun SearchTextField(
         )
     )
 }
+
