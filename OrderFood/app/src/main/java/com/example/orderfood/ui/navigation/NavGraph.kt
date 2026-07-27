@@ -114,7 +114,10 @@ fun AppNavGraph() {
                 val foodViewModel: FoodViewModel = hiltViewModel()
                 FavoriteScreen(
                     foodViewModel = foodViewModel,
-                    cartViewModel = cartViewModel
+                    cartViewModel = cartViewModel,
+                    onCartClick = {
+                        navController.navigate(Routes.CART)
+                    }
                 )
             }
             composable(Routes.ORDER_HISTORY) {

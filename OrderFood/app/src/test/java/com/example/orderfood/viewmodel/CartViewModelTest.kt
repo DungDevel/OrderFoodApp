@@ -72,7 +72,7 @@ class CartViewModelTest {
     }
 
     @Test
-    fun `checkout khi gio hang rong khong lam gi ca`() = runTest {
+    fun `dat hang khi gio hang rong khong lam gi ca`() = runTest {
         val viewModel = createViewModel()
         viewModel.checkout()
         advanceUntilIdle()
@@ -106,7 +106,7 @@ class CartViewModelTest {
     }
 
     @Test
-    fun `bam checkout 2 lan lien tiep khi dang loading khong tao 2 don`() = runTest {
+    fun `bam dat hang 2 lan lien tiep khi dang loading khong tao 2 don`() = runTest {
         val viewModel = createViewModel()
         viewModel.addToCart(TestData.phoBo)
 
