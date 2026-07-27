@@ -17,17 +17,6 @@ sealed class ApiResult<out T> {
 class FoodRepository @Inject constructor(
     private val api: ApiService
 ) {
-
-    suspend fun getOrders(): ApiResult<List<OrderResponse>> = try {
-        ApiResult.Success(api.getOrders()
-            .sortedByDescending { it.createdAt }
-            .take(15)
-        )
-    } catch (e: IOException) {
-        ApiResult.Error("Không kết nối được máy chủ. Kiểm tra mạng và thử lại.")
-    } catch (e: Exception) {
-        ApiResult.Error("Không tải được lịch sử đơn hàng: ${e.message}")
-    }
     suspend fun getFoods(): ApiResult<List<Food>> = try {
         ApiResult.Success(api.getFoods())
     } catch (e: IOException) {

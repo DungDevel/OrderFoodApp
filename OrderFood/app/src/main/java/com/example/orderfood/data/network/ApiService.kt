@@ -13,7 +13,4 @@ interface ApiService {
 
     @POST("orders")
     suspend fun placeOrder(@Body order: OrderRequest): OrderResponse
-
-    @GET("orders")
-    suspend fun getOrders(): List<OrderResponse>
 }

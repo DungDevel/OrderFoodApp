@@ -70,9 +70,7 @@ class CartViewModel @Inject constructor(private val repository: FoodRepository) 
                 items = cartMap.values.map {
                     OrderItemDto(it.food.id, it.food.name, it.quantity, it.food.price)
                 },
-                totalPrice = totalPrice,
-                createdAt = System.currentTimeMillis()
-
+                totalPrice = totalPrice
             )
             when (val result = repository.placeOrder(order)) {
                 is ApiResult.Success -> {
