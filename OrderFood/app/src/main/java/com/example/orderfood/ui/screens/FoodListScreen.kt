@@ -6,8 +6,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,6 +25,7 @@ import com.example.orderfood.data.model.Food
 import com.example.orderfood.utils.removeVietnameseDiacritics
 import com.example.orderfood.utils.toVnd
 import com.example.orderfood.viewmodel.CartViewModel
+import com.example.orderfood.viewmodel.FavoriteViewModel
 import com.example.orderfood.viewmodel.FoodUiState
 import com.example.orderfood.viewmodel.FoodViewModel
 
@@ -31,6 +34,7 @@ import com.example.orderfood.viewmodel.FoodViewModel
 fun FoodListScreen(
     foodViewModel: FoodViewModel,
     cartViewModel: CartViewModel,
+    favoriteViewModel: FavoriteViewModel,
     onCartClick: () -> Unit
 ) {
     val uiState by foodViewModel.uiState.collectAsState()
@@ -130,7 +134,9 @@ fun FoodListScreen(
                                     Box(Modifier.padding(horizontal = 12.dp, vertical = 5.dp)) {
                                         FoodItemCard(
                                             food = food,
-                                            onAdd = { cartViewModel.addToCart(food) }
+                                            isFavorite = favoriteViewModel.isFavorite(food.id),
+                                            onAdd = { cartViewModel.addToCart(food) },
+                                            onToggleFavorite = { favoriteViewModel.toggleFavorite(food.id) }
                                         )
                                     }
                                 }
@@ -144,9 +150,11 @@ fun FoodListScreen(
 }
 
 @Composable
-fun FoodItemCard(
+private fun FoodItemCard(
     food: Food,
-    onAdd: () -> Unit
+    isFavorite: Boolean,
+    onAdd: () -> Unit,
+    onToggleFavorite: () -> Unit
 ) {
     ElevatedCard(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -167,7 +175,23 @@ fun FoodItemCard(
                         style = MaterialTheme.typography.labelSmall)
                 }
             }
-            Button(onClick = onAdd, enabled = food.available) { Text("Thêm") }
+            IconButton(onClick = onToggleFavorite) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = "Yêu thích",
+                    tint = if (isFavorite)
+                        MaterialTheme.colorScheme.error
+                    else
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Button(onClick = onAdd, enabled = food.available) {
+                Text(
+                    text = "Thêm món",
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
