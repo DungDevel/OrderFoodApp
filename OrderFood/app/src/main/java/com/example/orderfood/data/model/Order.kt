@@ -2,7 +2,8 @@ package com.example.orderfood.data.model
 
 data class OrderRequest(
     val items: List<OrderItemDto>,
-    val totalPrice: Long
+    val totalPrice: Long,
+    val createdAt: Long
 )
 
 data class OrderItemDto(
@@ -15,5 +16,6 @@ data class OrderItemDto(
 data class OrderResponse(
     val id: String,
     val items: List<OrderItemDto>,
-    val totalPrice: Long
+    val totalPrice: Long,
+    val createdAt: Long
 )
