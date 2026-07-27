@@ -223,7 +223,7 @@ private fun SearchTextField(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
-        placeholder = { Text("Tìm món ăn") },
+        placeholder = { Text("Nhập món ăn muốn tìm") },
         singleLine = true,
         trailingIcon = {
             IconButton(onClick = onClose) {
