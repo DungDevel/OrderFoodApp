@@ -343,6 +343,180 @@
       ],
       "totalPrice": 45000,
       "id": "Zh3hq3quabg"
+    },
+    {
+      "createdAt": 1784864914179,
+      "items": [
+        {
+          "foodId": 4,
+          "name": "Cơm gà",
+          "price": 40000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 40000,
+      "id": "jlooJNtCXPw"
+    },
+    {
+      "createdAt": 1784867480254,
+      "items": [
+        {
+          "foodId": 1,
+          "name": "Phở bò",
+          "price": 45000,
+          "quantity": 1
+        },
+        {
+          "foodId": 3,
+          "name": "Phở nạm",
+          "price": 45000,
+          "quantity": 1
+        },
+        {
+          "foodId": 4,
+          "name": "Cơm gà",
+          "price": 40000,
+          "quantity": 1
+        },
+        {
+          "foodId": 5,
+          "name": "Cơm chiên",
+          "price": 45000,
+          "quantity": 1
+        },
+        {
+          "foodId": 6,
+          "name": "Bún bò",
+          "price": 42000,
+          "quantity": 1
+        },
+        {
+          "foodId": 7,
+          "name": "Bún chả",
+          "price": 45000,
+          "quantity": 1
+        },
+        {
+          "foodId": 8,
+          "name": "Coca",
+          "price": 5000,
+          "quantity": 1
+        },
+        {
+          "foodId": 9,
+          "name": "Pepsi",
+          "price": 25000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 317000,
+      "id": "n3An9eYw-wg"
+    },
+    {
+      "createdAt": 1784883464934,
+      "items": [
+        {
+          "foodId": 1,
+          "name": "Phở bò",
+          "price": 45000,
+          "quantity": 1
+        },
+        {
+          "foodId": 3,
+          "name": "Phở nạm",
+          "price": 45000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 90000,
+      "id": "W4RGY6s8s6w"
+    },
+    {
+      "createdAt": 1784884704505,
+      "items": [
+        {
+          "foodId": 3,
+          "name": "Phở nạm",
+          "price": 45000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 90000,
+      "id": "OHiacY3uxmA"
+    },
+    {
+      "createdAt": 1784884871306,
+      "items": [
+        {
+          "foodId": 1,
+          "name": "Phở bò",
+          "price": 45000,
+          "quantity": 2
+        },
+        {
+          "foodId": 3,
+          "name": "Phở nạm",
+          "price": 45000,
+          "quantity": 6
+        },
+        {
+          "foodId": 4,
+          "name": "Cơm gà",
+          "price": 40000,
+          "quantity": 1
+        },
+        {
+          "foodId": 5,
+          "name": "Cơm chiên",
+          "price": 45000,
+          "quantity": 8
+        },
+        {
+          "foodId": 6,
+          "name": "Bún bò",
+          "price": 42000,
+          "quantity": 2
+        },
+        {
+          "foodId": 7,
+          "name": "Bún chả",
+          "price": 45000,
+          "quantity": 1
+        },
+        {
+          "foodId": 8,
+          "name": "Coca",
+          "price": 5000,
+          "quantity": 1
+        },
+        {
+          "foodId": 9,
+          "name": "Pepsi",
+          "price": 25000,
+          "quantity": 4
+        }
+      ],
+      "totalPrice": 994000,
+      "id": "Hz9-FmPy2a4"
+    },
+    {
+      "createdAt": 1784885679808,
+      "items": [
+        {
+          "foodId": 1,
+          "name": "Phở bò",
+          "price": 45000,
+          "quantity": 1
+        },
+        {
+          "foodId": 5,
+          "name": "Cơm chiên",
+          "price": 45000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 90000,
+      "id": "5GAl4i8W85s"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
