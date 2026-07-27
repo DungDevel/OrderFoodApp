@@ -25,16 +25,12 @@ import com.example.orderfood.utils.toVnd
 import com.example.orderfood.viewmodel.CartViewModel
 import com.example.orderfood.viewmodel.FoodUiState
 import com.example.orderfood.viewmodel.FoodViewModel
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import com.example.orderfood.viewmodel.FavoriteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun FoodListScreen(
     foodViewModel: FoodViewModel,
     cartViewModel: CartViewModel,
-    favoriteViewModel: FavoriteViewModel,
     onCartClick: () -> Unit
 ) {
     val uiState by foodViewModel.uiState.collectAsState()
@@ -134,9 +130,7 @@ fun FoodListScreen(
                                     Box(Modifier.padding(horizontal = 12.dp, vertical = 5.dp)) {
                                         FoodItemCard(
                                             food = food,
-                                            isFavorite = favoriteViewModel.isFavorite(food.id),
-                                            onAdd = { cartViewModel.addToCart(food)},
-                                            onToggleFavorite = { favoriteViewModel.toggleFavorite(food.id)}
+                                            onAdd = { cartViewModel.addToCart(food) }
                                         )
                                     }
                                 }
@@ -152,9 +146,7 @@ fun FoodListScreen(
 @Composable
 fun FoodItemCard(
     food: Food,
-    isFavorite: Boolean,
-    onAdd: () -> Unit,
-    onToggleFavorite: () -> Unit
+    onAdd: () -> Unit
 ) {
     ElevatedCard(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -174,13 +166,6 @@ fun FoodItemCard(
                     Text("Hết món", color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.labelSmall)
                 }
-            }
-            IconButton(onClick = onToggleFavorite) {
-                Icon(
-                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Yêu thích",
-                    tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
             Button(onClick = onAdd, enabled = food.available) { Text("Thêm") }
         }

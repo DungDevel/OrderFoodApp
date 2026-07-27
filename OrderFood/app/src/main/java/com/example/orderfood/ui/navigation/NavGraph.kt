@@ -23,16 +23,12 @@ import com.example.orderfood.ui.screens.FoodListScreen
 import com.example.orderfood.ui.screens.OrderHistoryScreen
 import com.example.orderfood.viewmodel.CartViewModel
 import com.example.orderfood.viewmodel.FoodViewModel
-import androidx.compose.material.icons.filled.Favorite
-import com.example.orderfood.ui.screens.FavoriteScreen
-import com.example.orderfood.viewmodel.FavoriteViewModel
 
 object Routes {
     const val FOOD_LIST = "food_list"
     const val CART = "cart"
     const val CHECKOUT = "checkout"
     const val ORDER_HISTORY = "order_history"
-    const val FAVORITE = "favorite"
 }
 
 @Composable
@@ -40,7 +36,7 @@ fun AppNavGraph() {
     val navController = rememberNavController()
     val cartViewModel: CartViewModel = hiltViewModel()
 
-    val bottomNavRoutes = setOf(Routes.FOOD_LIST, Routes.FAVORITE, Routes.ORDER_HISTORY)
+    val bottomNavRoutes = setOf(Routes.FOOD_LIST, Routes.ORDER_HISTORY)
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
@@ -57,16 +53,6 @@ fun AppNavGraph() {
                         },
                         icon = { Icon(Icons.Default.Restaurant, contentDescription = "Thực đơn") },
                         label = { Text("Thực đơn") }
-                    )
-                    NavigationBarItem(
-                        selected = currentRoute == Routes.FAVORITE,
-                        onClick = {
-                            navController.navigate(Routes.FAVORITE) {
-                                popUpTo(Routes.FOOD_LIST)
-                            }
-                        },
-                        icon = { Icon(Icons.Default.Favorite, contentDescription = "Yêu thích") },
-                        label = { Text("Yêu thích") }
                     )
                     NavigationBarItem(
                         selected = currentRoute == Routes.ORDER_HISTORY,
@@ -89,11 +75,9 @@ fun AppNavGraph() {
         ) {
             composable(Routes.FOOD_LIST) {
                 val foodViewModel: FoodViewModel = hiltViewModel()
-                val favoriteViewModel: FavoriteViewModel = hiltViewModel()
                 FoodListScreen(
                     foodViewModel = foodViewModel,
                     cartViewModel = cartViewModel,
-                    favoriteViewModel = favoriteViewModel,
                     onCartClick = { navController.navigate(Routes.CART) }
                 )
             }
@@ -112,14 +96,6 @@ fun AppNavGraph() {
             }
             composable(Routes.ORDER_HISTORY) {
                 OrderHistoryScreen()
-            }
-            composable(Routes.FAVORITE) {
-                val foodViewModel: FoodViewModel = hiltViewModel()
-                FavoriteScreen(
-                    foodViewModel = foodViewModel,
-                    cartViewModel = cartViewModel,
-                    onCartClick = { navController.navigate(Routes.CART) }
-                )
             }
         }
     }
