@@ -150,7 +150,7 @@ fun FoodListScreen(
 }
 
 @Composable
-private fun FoodItemCard(
+fun FoodItemCard(
     food: Food,
     isFavorite: Boolean,
     onAdd: () -> Unit,
