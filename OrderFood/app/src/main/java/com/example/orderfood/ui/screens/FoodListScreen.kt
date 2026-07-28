@@ -1,36 +1,40 @@
 package com.example.orderfood.ui.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.orderfood.data.model.Food
+import com.example.orderfood.utils.removeVietnameseDiacritics
 import com.example.orderfood.utils.toVnd
 import com.example.orderfood.viewmodel.CartViewModel
+import com.example.orderfood.viewmodel.FavoriteViewModel
 import com.example.orderfood.viewmodel.FoodUiState
 import com.example.orderfood.viewmodel.FoodViewModel
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
-import com.example.orderfood.utils.removeVietnameseDiacritics
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun FoodListScreen(
     foodViewModel: FoodViewModel,
     cartViewModel: CartViewModel,
+    favoriteViewModel: FavoriteViewModel,
     onCartClick: () -> Unit
 ) {
     val uiState by foodViewModel.uiState.collectAsState()
@@ -63,7 +67,7 @@ fun FoodListScreen(
                         BadgedBox(
                             badge = {
                                 if (cartViewModel.totalQuantity > 0)
-                                    Badge { Text("${cartViewModel.totalQuantity}") }
+                                    Badge { Text(text = "${cartViewModel.totalQuantity}", fontSize = 15.sp) }
                             },
                             modifier = Modifier.padding(end = 12.dp)
                         ) {
@@ -128,7 +132,12 @@ fun FoodListScreen(
                                 stickyHeader { CategoryHeader(category) }
                                 items(foodsInCategory, key = { it.id }) { food ->
                                     Box(Modifier.padding(horizontal = 12.dp, vertical = 5.dp)) {
-                                        FoodItemCard(food = food, onAdd = { cartViewModel.addToCart(food) })
+                                        FoodItemCard(
+                                            food = food,
+                                            isFavorite = favoriteViewModel.isFavorite(food.id),
+                                            onAdd = { cartViewModel.addToCart(food) },
+                                            onToggleFavorite = { favoriteViewModel.toggleFavorite(food.id) }
+                                        )
                                     }
                                 }
                             }
@@ -141,27 +150,48 @@ fun FoodListScreen(
 }
 
 @Composable
-private fun FoodItemCard(food: Food, onAdd: () -> Unit) {
+fun FoodItemCard(
+    food: Food,
+    isFavorite: Boolean,
+    onAdd: () -> Unit,
+    onToggleFavorite: () -> Unit
+) {
     ElevatedCard(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
             AsyncImage(
                 model = food.image,
                 contentDescription = food.name,
-                modifier = Modifier.size(100.dp),
+                modifier = Modifier.size(70.dp),
                 error = androidx.compose.ui.graphics.painter.ColorPainter(
                     androidx.compose.ui.graphics.Color.LightGray
                 )
             )
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text(food.name, style = MaterialTheme.typography.titleMedium, fontSize = 20.sp)
+                Text(food.name, style = MaterialTheme.typography.titleMedium)
                 Text(food.price.toVnd(), style = MaterialTheme.typography.bodyMedium)
                 if (!food.available) {
                     Text("Hết món", color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.labelSmall)
                 }
             }
-            Button(onClick = onAdd, enabled = food.available) { Text(text = "Thêm món", fontWeight = FontWeight.Bold) }
+            IconButton(onClick = onToggleFavorite) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = "Yêu thích",
+                    tint = if (isFavorite)
+                        MaterialTheme.colorScheme.error
+                    else
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Button(onClick = onAdd, enabled = food.available) {
+                Text(
+                    text = "Thêm món",
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
@@ -200,7 +230,7 @@ private fun SearchTextField(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
-        placeholder = { Text("Tìm món ăn...") },
+        placeholder = { Text("Nhập món ăn muốn tìm") },
         singleLine = true,
         trailingIcon = {
             IconButton(onClick = onClose) {
